@@ -3,8 +3,7 @@ import toast from "react-hot-toast";
 import { useFormik } from "formik";
 import axios from "../api/axios";
 import { loginSchema } from "../schema";
-import AuthContext from "../context/AuthContext";
-import { useContext } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const initialValues = {
   email: "",
@@ -13,7 +12,7 @@ const initialValues = {
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const { handleUser } = useContext(AuthContext);
+  const { handleUser } = useAuth();
 
   const onSubmit = async (values, actions) => {
     try {
@@ -26,7 +25,7 @@ const LoginForm = () => {
       localStorage.setItem("token", `Bearer ${response.data.token}`);
       actions.resetForm();
       toast.success("Login successful!");
-      navigate("/letsarc"); 
+      navigate("/letsarc");
     } catch (error) {
       toast.error(error.response.data.message);
       console.log(error.response.data);
