@@ -5,6 +5,7 @@ import {
   login,
   authenticated,
   createUser,
+  getUserDetails,
 } from "../Services/Auth.js";
 
 import {
@@ -22,6 +23,7 @@ router.post("/register", register);
 router.post("/login", login);
 router.get("/auth", auth, authenticated);
 router.post("/create-user", createUser);
+router.get("/get-user", getUserDetails);
 
 router.post("/create-video", createVideo);
 router.get("/get-videos", auth, getVideos);

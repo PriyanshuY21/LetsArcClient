@@ -5,10 +5,16 @@ import UserModel from "../Models/userModel.js";
 
 export const register = async (req, res) => {
   console.log(req.body);
-  const { client_name, email, phone_number, password } = req.body;
+  const {
+    client_firstname,
+    client_lastname,
+    client_email,
+    client_phone_number,
+    password,
+  } = req.body;
 
   try {
-    const userExists = await UserModel.findOne({ client_email: email });
+    const userExists = await UserModel.findOne({ client_email: client_email });
 
     if (userExists) {
       return res.status(400).json({ message: "User already exists" });
@@ -17,9 +23,11 @@ export const register = async (req, res) => {
 
     const user = await UserModel.create({
       user_id: uuidv4(),
-      client_name,
-      client_email: email,
-      client_phone_number: phone_number,
+      client_firstname: client_firstname,
+      client_lastname: client_lastname,
+      client_username: client_firstname + uuidv4().slice(0, 5),
+      client_email: client_email,
+      client_phone_number: client_phone_number,
       password: hashedPassword,
     });
 
@@ -32,7 +40,6 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  console.log(req.body);
   const { email, password } = req.body;
 
   try {
@@ -86,7 +93,15 @@ export const authenticated = async (req, res) => {
 
 export const createUser = async (req, res) => {
   console.log(req.body);
-  const { client_name, client_email, client_phone_number, password } = req.body;
+  const {
+    client_firstname,
+    client_lastname,
+    client_email,
+    client_phone_number,
+    password,
+  } = req.body;
+
+  console.log("ok");
 
   try {
     const userExists = await UserModel.findOne({ client_email: client_email });
@@ -98,7 +113,9 @@ export const createUser = async (req, res) => {
 
     const user = await UserModel.create({
       user_id: uuidv4(),
-      client_name: client_name,
+      client_firstname: client_firstname,
+      client_lastname: client_lastname,
+      client_username: client_firstname + uuidv4().slice(0, 5),
       client_email: client_email,
       client_phone_number: client_phone_number,
       password: hashedPassword,
@@ -107,6 +124,23 @@ export const createUser = async (req, res) => {
     user.password = undefined;
 
     res.status(201).json({ user: user, message: "User created successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const getUserDetails = async (req, res) => {
+  try {
+    const { user_id } = req.query;
+    const user = await UserModel.findOne({ user_id: user_id });
+
+    if (!user) {
+      return res.status(404).json({ message: "User does not exist" });
+    }
+
+    user.password = undefined;
+
+    res.status(200).json({ user });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }

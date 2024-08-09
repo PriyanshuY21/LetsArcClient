@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { Dashboard, Login } from "./pages";
-import AuthContext from "./context/AuthContext.js";
-import axios from "./api/axios.jsx";
-import LetsarcApp from "../../Letsarc/src/App.jsx"; 
+import { useAuth } from "./context/AuthContext.jsx";
+import LetsarcApp from "../../Letsarc/src/App.jsx";
 
 const App = () => {
-  const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const { user, setUser } = useAuth();
+
+  useEffect(() => {
+    handleUser(user);
+  }, [user]);
 
   const handleUser = (user) => {
     setUser(user);
@@ -17,30 +20,13 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    isAuthenticated();
-  }, []);
-
-  const isAuthenticated = async () => {
-    try {
-      const response = await axios.get("/auth", {
-        headers: { authorization: localStorage.getItem("token") },
-      });
-      console.log(response.data);
-      handleUser(response.data.user);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <div className="font-outfit">
-      <AuthContext.Provider value={{ user, handleUser }}>
-        <Routes>
-          <Route path="/" element={user ? <Dashboard /> : <Login />} />
-          <Route path="/letsarc" element={<LetsarcApp />} />
-        </Routes>
-      </AuthContext.Provider>
+      <Routes>
+        <Route path="/" element={user ? <Dashboard /> : <Login />} />
+        <Route path="/letsarc" element={<LetsarcApp />} />
+      </Routes>
+
       <Toaster
         position="top-center"
         toastOptions={{
