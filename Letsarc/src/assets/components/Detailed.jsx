@@ -23,7 +23,6 @@ const Detailed = ({ project }) => {
     <div className="border border-gray-200 rounded-lg bg-secondary shadow-lg p-4 mt-4">
       <div className="flex items-center justify-center mb-4">
         <div className="flex items-center pt-3 pb-3">
-          <img src={project.src} alt={`${project.name} logo`} className="h-8 w-8 mr-2 rounded-full" />
           <h3 className="text-2xl font-bold text-center pt-1 pb-1">{project.name}</h3>
         </div>
       </div>

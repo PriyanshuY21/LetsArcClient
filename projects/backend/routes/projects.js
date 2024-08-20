@@ -16,7 +16,6 @@ router.post('/', async (req, res) => {
     name: req.body.name,
     progress: req.body.progress,
     startDate: req.body.startDate,
-    src: req.body.src
   });
 
   try {

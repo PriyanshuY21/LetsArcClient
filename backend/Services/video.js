@@ -1,5 +1,5 @@
 import VideoModel from "../Models/videoModel.js";
-import UserModel from "../Models/userModel.js";
+import UserModel from "../Models/User.js";
 import { v4 as uuidv4 } from "uuid";
 import { formatDate } from "../utils/index.js";
 

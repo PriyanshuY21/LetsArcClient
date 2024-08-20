@@ -113,8 +113,7 @@ const Dashboard = () => {
                     onClick={() => setSelectedProject(project)}
                     style={{ cursor: 'pointer' }}
                   >
-                    <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-text flex items-center">
-                      <img src={project.src} alt={`${project.name} logo`} className="h-8 w-8 mr-2 rounded-full" />
+                    <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-text">
                       {project.name}
                     </td>
                     <td className="px-8 py-3 text-center whitespace-nowrap text-sm text-accent" style={{ width: '200%' }}>
@@ -146,7 +145,6 @@ const Dashboard = () => {
                 <div key={project.name} className="flex flex-col">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center pl-4">
-                      <img src={project.src} alt={`${project.name} logo`} className="h-8 w-8 mr-2 rounded-full" />
                       <h4 className="text-base font-medium">{project.name}</h4>
                     </div>
                     <p className="text-base font-medium text-gr pr-4">{project.progress.completed} / {project.progress.total} Completed</p>
