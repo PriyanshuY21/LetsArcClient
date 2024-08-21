@@ -16,7 +16,6 @@ router.post("/login", login);
 
 router.get("/auth", auth, authenticated);
 
-// New route to get user details
 router.get("/user-details", auth, getUserDetails);
 
 router.post("/create-video", createVideo);
