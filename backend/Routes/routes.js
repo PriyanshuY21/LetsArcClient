@@ -1,6 +1,6 @@
 import express from "express";
 import { auth } from "../Middleware/auth.js";
-import { login, authenticated } from "../Services/Auth.js";
+import { login, authenticated, getUserDetails } from "../Services/Auth.js";
 import {
   createVideo,
   deleteVideo,
@@ -15,6 +15,9 @@ const router = express.Router();
 router.post("/login", login);
 
 router.get("/auth", auth, authenticated);
+
+// New route to get user details
+router.get("/user-details", auth, getUserDetails);
 
 router.post("/create-video", createVideo);
 

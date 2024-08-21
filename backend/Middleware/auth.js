@@ -10,9 +10,9 @@ export const auth = (req, res, next) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const user = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    req.email = user.email;
-    console.log("Decoded user email:", req.email);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    req.user = { id: decoded.id, email: decoded.email };
+    console.log("Decoded user details:", req.user); 
     next();
   } catch (error) {
     console.error("Token verification error:", error);
