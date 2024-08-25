@@ -9,19 +9,22 @@ const Concern = () => {
     projectName: '',
     email: '',
     comments: ''
-  });
+  }); // State to manage form input values
 
-  const [showDialog, setShowDialog] = useState(false);
-  const [error, setError] = useState('');
+  const [showDialog, setShowDialog] = useState(false); // Controls visibility of dialog box
+  const [error, setError] = useState(''); // Manages error messages
 
+  // Handles form input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  // Handles form submission
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevents default form submission behavior
     const { firstName, lastName, problemType, projectName, email, comments } = formData;
 
+    // Checks for empty fields
     if (!firstName || !lastName || !problemType || !projectName || !email || !comments) {
       setError('All fields are required');
       setShowDialog(true);
@@ -29,19 +32,32 @@ const Concern = () => {
     }
 
     try {
+      // Send form data to server
       await axios.post('http://localhost:5001/api/concerns', formData);
-      setShowDialog(true);
-      setError(''); 
+      setShowDialog(true); // Shows success dialog
+      setError(''); // Clear any previous error messages
+
+      // Clear form data after successful submission
+      setFormData({
+        firstName: '',
+        lastName: '',
+        problemType: '',
+        projectName: '',
+        email: '',
+        comments: ''
+      });
+
     } catch (err) {
       console.error('Error submitting form:', err);
-      setError('Failed to submit the form');
+      setError('Failed to submit the form'); // Show an error message
       setShowDialog(true);
     }
   };
 
+  // Handle closing dialog
   const handleCloseDialog = () => {
     setShowDialog(false);
-    setError(''); 
+    setError(''); // Clears error message when dialog is closed
   };
 
   return (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaPenFancy, FaCheck, FaCamera, FaMicrophone, FaVideo, FaFilm, FaFlag, FaEnvelope, FaThumbsUp, FaFileInvoice, FaDollarSign, FaFileAlt } from 'react-icons/fa';
 
+// Defines steps involved in project with corresponding icons and descriptions
 const steps = [
   { name: 'Script Writing', icon: <FaPenFancy />, description: 'Write the initial script for the project.' },
   { name: 'Script Approval', icon: <FaCheck />, description: 'Approve the written script.' },
@@ -17,24 +18,31 @@ const steps = [
 ];
 
 const Detailed = ({ project }) => {
+  // Calculates number of completed steps based on project progress
   const completedSteps = project.progress.completed;
 
   return (
     <div className="border border-gray-200 rounded-lg bg-secondary shadow-lg p-4 mt-4">
+      {/* Displays project name in header */}
       <div className="flex items-center justify-center mb-4">
         <div className="flex items-center pt-3 pb-3">
           <h3 className="text-2xl font-bold text-center pt-1 pb-1">{project.name}</h3>
         </div>
       </div>
+      {/* Displays steps as a grid */}
       <div className="grid grid-cols-6 gap-4">
         {steps.map((step, index) => (
           <div
             key={index}
+            // Sets background color based on progress: completed, current, or upcoming
             className={`flex flex-col items-center justify-center p-4 rounded-lg shadow-md relative group ${index < completedSteps ? 'bg-gr' : index === completedSteps ? 'bg-gr2' : 'bg-nc'}`}
             style={{ height: '160px' }}
           >
+            {/* Displays icon for each step */}
             <div className="text-3xl mb-2 opacity-40">{step.icon}</div>
+            {/* Displays name of each step */}
             <div className="text-base text-center">{step.name}</div>
+            {/* Shows description as tooltip on hovering for uncompleted steps */}
             {index >= completedSteps && (
               <div className="absolute bottom-0 w-full text-center p-2 bg-gray-600 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 {step.description}

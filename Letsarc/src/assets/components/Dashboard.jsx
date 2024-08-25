@@ -4,47 +4,60 @@ import ProgressBar from './Progressbar';
 import Detailed from './Detailed';
 
 const Dashboard = () => {
+  // Stores list of projects fetched from backend
   const [projects, setProjects] = useState([]);
+
+  // State to stores current search term entered by user
   const [searchTerm, setSearchTerm] = useState('');
+
+  // State to stores currently selected project for detailed view
   const [selectedProject, setSelectedProject] = useState(null);
+
+  // State to stores current filter (All, Ongoing, Completed)
   const [filter, setFilter] = useState('All');
 
+  // useEffect hook to fetch projects data when component mounts
   useEffect(() => {
     fetch('http://localhost:5002/projects')
       .then(response => response.json())
       .then(data => {
-        setProjects(data);
-        setSelectedProject(data[0]);
+        setProjects(data); // Sets fetched projects data
+        setSelectedProject(data[0]); // Sets first project as selected project by default
       });
   }, []);
 
+  // Function to handle deletion of a project
   const handleDelete = (projectName) => {
     fetch(`http://localhost:5002/projects/${projectName}`, { method: 'DELETE' })
       .then(() => {
+        // Update projects state by filtering out deleted project
         setProjects(projects.filter((project) => project.name !== projectName));
       });
   };
 
+  // Function to filter projects based on current filter and search term
   const filteredProjects = projects.filter(project => {
-    if (filter === 'All') return true;
-    if (filter === 'Ongoing') return project.progress.completed < project.progress.total;
-    if (filter === 'Completed') return project.progress.completed === project.progress.total;
+    if (filter === 'All') return true; 
+    if (filter === 'Ongoing') return project.progress.completed < project.progress.total; 
+    if (filter === 'Completed') return project.progress.completed === project.progress.total; 
   }).filter(project =>
-    project.name.toLowerCase().includes(searchTerm.toLowerCase())
+    project.name.toLowerCase().includes(searchTerm.toLowerCase()) // Filters based on the search term
   );
 
+  // Get list of projects that are almost completed (9 to 11 out of 12)
   const almostCompletedProjects = projects
     .filter(project => project.progress.completed >= 9 && project.progress.completed <= 11)
-    .sort((a, b) => b.progress.completed - a.progress.completed);
+    .sort((a, b) => b.progress.completed - a.progress.completed); // Sort by completion status
 
+  // Function to get row's class name based on its state (selected, even/odd row)
   const getRowClassName = (project, index) => {
     if (project === selectedProject) {
-      return 'bg-nn2';
+      return 'bg-nn2'; // Highlights selected project
     } else {
       if (index % 2 === 0) {
-        return 'bg-secondary';
+        return 'bg-secondary'; // Even row style
       } else {
-        return 'bg-nn';
+        return 'bg-nn'; // Odd row style
       }
     }
   };
@@ -73,6 +86,8 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Filter buttons for All, Ongoing, Completed */}
       <div className="flex mb-4">
         <button
           className={`px-4 py-2 rounded-md ml-2 ${filter === 'All' ? 'bg-text text-secondary' : 'bg-gray-200'}`}
@@ -93,6 +108,8 @@ const Dashboard = () => {
           Completed
         </button>
       </div>
+
+      {/* Main content area with project list and almost completed projects */}
       <div className="flex" style={{ height: '50%' }}>
         <div className="flex flex-col w-2/3 pr-2">
           <div className="overflow-auto flex-1 border border-gray-200 rounded-lg shadow-lg p-2 custom-scrollbar">
@@ -137,6 +154,8 @@ const Dashboard = () => {
             </table>
           </div>
         </div>
+
+        {/* Almost Completed Projects Section */}
         <div className="flex flex-col w-1/3 pl-2" style={{ marginTop: '-3rem', height: '116%' }}>
           <div className="overflow-auto flex-1 border border-gray-200 rounded-lg shadow-lg p-4 custom-scrollbar">
             <h2 className="text-2xl opacity-90 font-bold mb-4 ml-16">Almost Completed</h2>
@@ -156,6 +175,8 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Detailed View Component for the Selected Project */}
       {selectedProject && <Detailed project={selectedProject} />}
     </div>
   );
