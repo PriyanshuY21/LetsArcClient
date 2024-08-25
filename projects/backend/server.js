@@ -29,5 +29,4 @@ app.use('/projects', projectsRouter);
 // Define port for server to listen on
 const PORT = process.env.PORT || 5002;
 
-// Starts server and log port it's running on
 app.listen(PORT, () => console.log(`Server Started on port ${PORT}`));
